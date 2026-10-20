@@ -480,21 +480,18 @@ def main() -> None:
 
     mihomo_path = out_dir / "mihomo.yaml"
     mihomo_path.write_text(build_mihomo(nodes), encoding="utf-8")
-    
-        home_path = out_dir / "vpngate-home.txt"
+
+    # Export full OpenVPN profiles in the paste format used by VPN Gate home-mode UI.
+    home_path = out_dir / "vpngate-home.txt"
     home_lines = [
         f"{node['country_code']}:{node['ovpn_base64']}"
         for node in nodes
         if node.get("ovpn_base64")
     ]
-    home_path.write_text(
-        "\n".join(home_lines) + "\n",
-        encoding="utf-8",
-    )
+    home_path.write_text("\n".join(home_lines) + "\n", encoding="utf-8")
 
-    log(f"[done] wrote {home_path} with {len(home_lines)} nodes")
+    log(f"[done] wrote {singbox_path}, {mihomo_path}, and {home_path} with {len(nodes)} nodes")
 
-    log(f"[done] wrote {singbox_path} and {mihomo_path} with {len(nodes)} nodes")
 
 if __name__ == "__main__":
     main()
